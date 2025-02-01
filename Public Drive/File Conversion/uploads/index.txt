@@ -1,0 +1,38 @@
+
+
+
+    
+    
+    Country Selector
+    
+    
+
+
+    
+        Select Country:
+        
+        Save Country
+        
+    
+
+    
+        $(document).ready(function() {
+            let savedCountries = ["Iceland", "USA", "India", "Germany"];
+
+            $('#saveCountry').click(function() {
+                let countryName = $('#country').val().trim();
+                if (countryName === "") {
+                    $('#result').html('Please enter a country name.');
+                    return;
+                }
+                
+                if (savedCountries.includes(countryName)) {
+                    $('#result').html('Country selected: ' + countryName + '');
+                } else {
+                    savedCountries.push(countryName);
+                    $('#result').html('"' + countryName + '" saved to the country database.');
+                }
+            });
+        });
+    
+
