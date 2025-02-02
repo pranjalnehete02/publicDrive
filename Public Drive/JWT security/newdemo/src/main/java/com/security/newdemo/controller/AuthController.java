@@ -2,26 +2,27 @@ package com.security.newdemo.controller;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.security.newdemo.entity.User;
+import com.security.newdemo.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import com.security.newdemo.entity.AuthResponse;
 import com.security.newdemo.entity.LoginRequest;
 import com.security.newdemo.filter.CustomJWTTokenService;
-
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private RegisterService userService;
 
     @Autowired
     private CustomJWTTokenService tokenService;
@@ -40,7 +41,11 @@ public class AuthController {
         String token = tokenService.generateToken(authentication.getName());
         return ResponseEntity.ok(new AuthResponse(token));
     }
-
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody User user) {
+        userService.saveUser(user);
+        return ResponseEntity.ok("user added successfully");
+    }
 
     // @PostMapping("/login")
     // public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -67,11 +72,11 @@ public class AuthController {
     //     return ResponseEntity.ok(new AuthResponse(newToken));
     // }
 
-    // // Optional: Method to clear token on logout
-    // @PostMapping("/logout")
-    // public ResponseEntity<?> logout(@RequestBody LoginRequest loginRequest) {
-    //     activeTokens.remove(loginRequest.getUsername());
-    //     return ResponseEntity.ok("Logged out successfully.");
-    // }
+     // Optional: Method to clear token on logout
+     @PostMapping("/logout")
+     public ResponseEntity<?> logout(@RequestBody LoginRequest loginRequest) {
+         activeTokens.remove(loginRequest.getUsername());
+         return ResponseEntity.ok("Logged out successfully.");
+     }
 }
 

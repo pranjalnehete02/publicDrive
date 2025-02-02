@@ -19,6 +19,9 @@ public class RegisterService {
     public void saveUser(User user) {
         // Encode the password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(user.getRole()==null){
+            user.setRole("ROLE_USER");
+        }
         userRepository.save(user);
     }
 }
