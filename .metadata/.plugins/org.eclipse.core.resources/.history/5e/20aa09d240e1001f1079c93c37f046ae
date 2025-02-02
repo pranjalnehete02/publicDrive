@@ -1,5 +1,0 @@
-package com.publicdrive.repository;
-
-public interface UserRepository {
-
-}

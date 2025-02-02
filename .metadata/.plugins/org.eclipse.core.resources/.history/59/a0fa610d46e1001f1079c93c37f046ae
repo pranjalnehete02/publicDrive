@@ -1,5 +1,0 @@
-package com.publicdrive.auth;
-
-public class JwtAuthenticationFilter {
-
-}

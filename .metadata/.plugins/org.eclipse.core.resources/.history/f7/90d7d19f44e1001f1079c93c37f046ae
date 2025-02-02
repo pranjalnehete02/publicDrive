@@ -1,4 +1,0 @@
-spring.application.name=public-drive-backend
-spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:publicKey.pem
-# OR, for symmetric signing
-spring.security.oauth2.resourceserver.jwt.secret-key=your-secret-key
