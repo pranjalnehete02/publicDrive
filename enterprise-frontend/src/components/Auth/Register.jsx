@@ -12,13 +12,13 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Simple validation
+    
     if (password !== confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
 
-    // Mock API call
+    
     console.log('Register with:', { username, email, password });
     alert('Registration successful (mock)! Redirecting to login...');
     navigate('/login');
@@ -66,7 +66,7 @@ const Register = () => {
             error={password !== confirmPassword}
             helperText={password !== confirmPassword ? "Passwords don't match!" : ""}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button href="/homepage" type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Register
           </Button>
           <Link href="/login" variant="body2">
