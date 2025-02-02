@@ -1,0 +1,63 @@
+package com.publicdrive.auth;
+
+import io.jsonwebtoken.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.security.config.web.server.ServerHttpSecurity.OAuth2ResourceServerSpec.JwtSpec;
+
+public class JwtTokenUtil {
+
+    private String secretKey = "your_secret_key"; // Use a better secret in production
+
+    public String generateToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, username);
+    }
+
+    private String createToken(Map<String, Object> claims, String username) {
+        long expirationTime = 1000 * 60 * 60; // 1 hour
+        return JwtSpec.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private <T> T extractClaim(String token, ClaimsResolver<T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.resolve(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public boolean validateToken(String token, String username) {
+        return (username.equals(extractUsername(token)) && !isTokenExpired(token));
+    }
+
+    @FunctionalInterface
+    public interface ClaimsResolver<T> {
+        T resolve(Claims claims);
+    }
+}
