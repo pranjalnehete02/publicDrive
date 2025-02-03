@@ -17,10 +17,17 @@ const HomePage = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        
-        const response = await axios.post('http://localhost:8081/api/files/files', null, {
-          params: { username },
-        });
+        const token = localStorage.getItem('token');
+        const response = await axios.post(
+          'http://localhost:8081/api/files/files',
+          null,
+          {
+            params: { username },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         console.log(response.data)
         
         dispatcher(addFilenames(response.data));

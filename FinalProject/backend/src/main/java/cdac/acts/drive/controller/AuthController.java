@@ -22,11 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final Path rootLocation = Paths.get("C:/Users/adity/OneDrive/Desktop/Project CDAC/FIleDataBase");
+    private final Path rootLocation = Paths.get("C:/Public Drive F/publicDrive/FinalProject/FileDb");
 
     @Autowired
     private AuthenticationManager authenticationManager;

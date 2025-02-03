@@ -6,6 +6,7 @@ import { FileManager } from './components/FileManager';
 import UploadPage from './components/UploadPage';
 import {Toaster } from 'react-hot-toast'
 import FileViewer from './components/FileViewer';
+import EditFile from './components/EditFile';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
 
         <Route path="/homepage" element={<HomePage />}>
           <Route index element={<FileManager />} />
+          <Route path="editfile" element={<EditFile />} />
           <Route path="upload" element={<UploadPage />} />
           <Route path="viewfile" element={<FileViewer />}/> 
         </Route>

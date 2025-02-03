@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/files")
 public class FileController {
 
-    private final Path rootLocation = Paths.get("C:/Users/adity/OneDrive/Desktop/Project CDAC/FIleDataBase");
+    private final Path rootLocation = Paths.get("C:/Public Drive F/publicDrive/FinalProject/FileDb");
 
     @Autowired
     private UserRepository userRepository;

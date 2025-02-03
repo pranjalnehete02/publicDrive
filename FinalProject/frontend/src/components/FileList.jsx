@@ -9,15 +9,23 @@ import {
   Paper,
   IconButton,
 } from "@mui/material";
-import { Download, Share, Pageview } from "@mui/icons-material";
+import { Download, Share, Pageview, Edit } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"; 
+import toast from "react-hot-toast";
 
 export const FileList = ({ files }) => {
     const username = useSelector(state=>state.user.user)
     const navigate = useNavigate();
+    const editHandler = (fid, fname) => {
+      const fileExtension = fname.split('.').pop().toLowerCase(); // Get file extension
 
-
+      if (fileExtension !== "txt") {
+          toast.error("Only text files (.txt) can be edited!", { position: "top-right" });
+          return;
+      }
+      navigate(`editfile?fid=${fid}`);
+  };
     const downloadHandler = async (fid) => {
         try {
           // Send GET request to backend to fetch file
@@ -93,7 +101,7 @@ export const FileList = ({ files }) => {
             </TableRow>
           </TableHead>
           <TableBody>{
-            console.log("111112222333"+files)
+           
             }
             {files.map((file, index) => (
                 
@@ -112,6 +120,9 @@ export const FileList = ({ files }) => {
                 <TableCell>
                   <IconButton onClick={()=>{downloadHandler(file?.fid)}} size="small" sx={{ color: "#3498db" }}>
                     <Download />
+                  </IconButton>
+                   <IconButton onClick={() => editHandler(file?.fid, file?.fname)} size="small" sx={{ color: "#3498db" }}>
+                    <Edit />
                   </IconButton>
                   <IconButton size="small" sx={{ color: "#f39c12" }}>
                     <Share />
