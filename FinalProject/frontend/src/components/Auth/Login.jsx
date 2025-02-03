@@ -44,6 +44,9 @@ export default function Login() {
   };
 
   return (
+    <div className='main'>
+
+   
     <Components.Container>
       <Components.SignUpContainer signingIn={signIn}>
         <Components.Form>
@@ -86,6 +89,7 @@ export default function Login() {
         </Components.Overlay>
       </Components.OverlayContainer>
     </Components.Container>
+    </div>
   );
 }
 
