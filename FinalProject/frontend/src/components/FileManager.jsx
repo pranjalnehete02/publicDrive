@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import { FileList } from "./FileList";
 import { deleteUser } from "../reduxstore/userSlice";
-
+import {removeFilenames} from "../reduxstore/usersFileSlice"
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
@@ -74,6 +74,8 @@ export const Sidebar = () => {
               borderRadius: "4px",
               mb: 1,
             }}
+            component={Link}
+            to="/homepage/sharedwithme"
           >
             <ListItemText primary="Shared with me" sx={{ color: "white" }} />
           </ListItemButton>
@@ -100,9 +102,10 @@ export const Sidebar = () => {
             height: "1px",
             padding: "0 16px",
           }}
+          onClick={()=>{dispatch(deleteUser()); dispatch(removeFilenames()); }}
         >
           <ListItemText
-            primary="Logout" onClick={()=>{dispatch(deleteUser())}}
+            primary="Logout" 
             sx={{ color: "white", marginRight: 2 }}
           />
           <IconButton sx={{ color: "white" }}>

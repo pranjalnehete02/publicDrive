@@ -124,7 +124,7 @@ export const FileList = ({ files }) => {
                    <IconButton onClick={() => editHandler(file?.fid, file?.fname)} size="small" sx={{ color: "#3498db" }}>
                     <Edit />
                   </IconButton>
-                  <IconButton size="small" sx={{ color: "#f39c12" }}>
+                  <IconButton onClick={()=>{navigate(`/homepage/shared?uname=${file?.owner}&fid=${file?.fid}`)}}  size="small" sx={{ color: "#f39c12" }}>
                     <Share />
                   </IconButton>
                 </TableCell>

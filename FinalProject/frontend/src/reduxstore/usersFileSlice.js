@@ -9,10 +9,13 @@ export const usersFileSlice = createSlice({
     addFilenames: (state, action) => {
       state.filenames = action.payload
     },
+    removeFilenames: (state)=>{
+      state.filenames = [];
+    }
   },
 })
 
 
-export const { addFilenames } = usersFileSlice.actions
+export const { addFilenames, removeFilenames } = usersFileSlice.actions
 
 export default usersFileSlice.reducer

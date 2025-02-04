@@ -9,6 +9,8 @@ import FileViewer from './components/FileViewer';
 import EditFile from './components/EditFile';
 import ForgotPassword from './components/Auth/ForgotPassword';
 import ResetPassword from './components/Auth/ResetPassword';
+import ShareFile from './components/ShareFile';
+import { SharedFileList } from './components/SharedFileList';
 
 function App() {
   return (
@@ -29,6 +31,9 @@ function App() {
           
           <Route path="upload" element={<UploadPage />} />
           <Route path="viewfile" element={<FileViewer />}/> 
+          
+          <Route path="sharedwithme" element={<SharedFileList/>} />
+          <Route path="shared" element={<ShareFile/>} />
         </Route>
         
       </Routes>
