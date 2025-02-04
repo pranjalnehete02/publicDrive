@@ -7,6 +7,8 @@ import UploadPage from './components/UploadPage';
 import {Toaster } from 'react-hot-toast'
 import FileViewer from './components/FileViewer';
 import EditFile from './components/EditFile';
+import ForgotPassword from './components/Auth/ForgotPassword';
+import ResetPassword from './components/Auth/ResetPassword';
 
 function App() {
   return (
@@ -16,12 +18,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/upload" element={<UploadPage />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<Login />} /> {/* Default to login */}
         {/* <Route path='homepage' element={<HomePage/>} /> */}
 
         <Route path="/homepage" element={<HomePage />}>
           <Route index element={<FileManager />} />
           <Route path="editfile" element={<EditFile />} />
+          
           <Route path="upload" element={<UploadPage />} />
           <Route path="viewfile" element={<FileViewer />}/> 
         </Route>

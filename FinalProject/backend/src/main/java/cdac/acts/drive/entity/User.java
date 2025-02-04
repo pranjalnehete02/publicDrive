@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 
 @Data
 @Getter
@@ -20,6 +22,24 @@ public class User {
     private String email;
     private String password;
     private String role;
+    private String resetToken;    // Token for password reset
+    private Date resetTokenExpiry;
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public Date getResetTokenExpiry() {
+        return resetTokenExpiry;
+    }
+
+    public void setResetTokenExpiry(Date resetTokenExpiry) {
+        this.resetTokenExpiry = resetTokenExpiry;
+    }
 
     public String getEmail() {
         return email;
@@ -59,5 +79,18 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", resetToken='" + resetToken + '\'' +
+                ", resetTokenExpiry=" + resetTokenExpiry +
+                '}';
     }
 }

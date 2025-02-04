@@ -34,6 +34,7 @@ export default function Login() {
       toast.error(err.message)
     })
   }
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
    
@@ -62,7 +63,7 @@ export default function Login() {
           <Components.Title>Sign in</Components.Title>
           <Components.Input type="text" name="username" onChange={handleInputChange} placeholder="username" />
           <Components.Input type="password" name="password" onChange={handleInputChange} placeholder="Password" />
-          <Components.Anchor href="#">Forgot your password?</Components.Anchor>
+          <Components.Anchor href="forgotpassword" onClick={()=>navigate("/forgotpassword")}>Forgot your password?</Components.Anchor>
           <Components.Button type="button" onClick={()=>{handleLogin()}}>Sign In</Components.Button>
         </Components.Form>
       </Components.SignInContainer>
