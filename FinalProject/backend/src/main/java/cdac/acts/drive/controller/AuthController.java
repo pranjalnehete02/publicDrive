@@ -14,7 +14,9 @@ import cdac.acts.drive.filter.CustomJWTTokenService;
 import cdac.acts.drive.repository.FolderRepository;
 import cdac.acts.drive.repository.UserRepository;
 import cdac.acts.drive.service.RegisterService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +28,15 @@ import org.springframework.security.core.Authentication;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final Path rootLocation = Paths.get("C:/Public Drive F/publicDrive/FinalProject/FileDb");
+
+    @Value("${file.storage.path}")
+    private String storagePath;
+    private Path rootLocation;
+
+    @PostConstruct
+    public void init() {
+        this.rootLocation = Paths.get(storagePath);
+    }
 
     @Autowired
     private AuthenticationManager authenticationManager;

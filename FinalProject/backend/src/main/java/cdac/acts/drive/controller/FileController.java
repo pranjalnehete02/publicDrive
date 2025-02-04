@@ -6,7 +6,9 @@ import cdac.acts.drive.entity.User;
 import cdac.acts.drive.repository.FileStorageRepository;
 import cdac.acts.drive.repository.FolderRepository;
 import cdac.acts.drive.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,8 +35,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/files")
 public class FileController {
 
-    private final Path rootLocation = Paths.get("C:/Public Drive F/publicDrive/FinalProject/FileDb");
+    @Value("${file.storage.path}")
+    private String storagePath;
+    private Path rootLocation;
 
+    @PostConstruct
+    public void init() {
+        this.rootLocation = Paths.get(storagePath);
+    }
     @Autowired
     private UserRepository userRepository;
 
