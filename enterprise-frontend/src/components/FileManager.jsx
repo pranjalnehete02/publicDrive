@@ -5,26 +5,23 @@ import {
   Box,
   Typography,
   List,
-  ListItem,
   ListItemText,
   Drawer,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   IconButton,
   Divider,
   ListItemButton,
 } from "@mui/material";
-import { Download, Share } from "@mui/icons-material";
 import { ExitToApp } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
+import { FileList } from "./FileList";
+import { deleteUser } from "../reduxstore/userSlice";
+import {removeFilenames} from "../reduxstore/usersFileSlice"
+
 
 export const Sidebar = () => {
+  const dispatch = useDispatch();
+
   return (
     <Drawer
       variant="permanent"
@@ -78,6 +75,8 @@ export const Sidebar = () => {
               borderRadius: "4px",
               mb: 1,
             }}
+            component={Link}
+            to="/homepage/sharedwithme"
           >
             <ListItemText primary="Shared with me" sx={{ color: "white" }} />
           </ListItemButton>
@@ -106,7 +105,7 @@ export const Sidebar = () => {
           }}
         >
           <ListItemText
-            primary="Logout"
+            primary="Logout" onClick={()=>{dispatch(deleteUser()); dispatch(removeFilenames()); console.log("logout");}}
             sx={{ color: "white", marginRight: 2 }}
           />
           <IconButton sx={{ color: "white" }}>
@@ -118,76 +117,13 @@ export const Sidebar = () => {
   );
 };
 
-export const FileList = ({ files }) => {
-  return (
-    <TableContainer
-      component={Paper}
-      elevation={2}
-      sx={{ borderRadius: 2, backgroundColor: "#ecf0f1" }}
-    >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold", color: "#34495e" }}>
-              File Name
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", color: "#34495e" }}>
-              Size
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", color: "#34495e" }}>
-              Owner
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", color: "#34495e" }}>
-              Actions
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {files.map((file, index) => (
-            <TableRow
-              key={index}
-              hover
-              sx={{ "&:hover": { backgroundColor: "#d5dbdb" } }}
-            >
-              <TableCell>{file}</TableCell>
-              <TableCell>{file?.size}</TableCell>
-              <TableCell>{file?.owner}</TableCell>
-              <TableCell>
-                <IconButton size="small" sx={{ color: "#3498db" }}>
-                  <Download />
-                </IconButton>
-                <IconButton size="small" sx={{ color: "#f39c12" }}>
-                  <Share />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-};
-
 export const FileManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  //   const[files, setFiles] = useState([]);
-  let files = useSelector((state) => state.counter.filenames);
+  let files = useSelector((state) => state.usersfile.filenames);
   console.log("from filemanager: ", files);
-  
-  //   const [files, setFiles] = useState([
-  //     { id: 1, name: "Document.pdf", type: "pdf", size: "1.2MB", owner: "Me" },
-  //     { id: 2, name: "Project.zip", type: "zip", size: "15MB", owner: "Me" },
-  //     { id: 3, name: "Image.png", type: "image", size: "2.5MB", owner: "Me" },
-  //     { id: 4, name: "Notes.txt", type: "text", size: "500KB", owner: "Me" },
-  //     { id: 5, name: "Douument.pdf", type: "pdf", size: "1.2MB", owner: "Me" },
-  //   ]);
-
-  //   const filteredFiles = files.filter((file) =>
-  //     file.name.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
 
   const filteredFiles = files.filter((file) =>
-    file.toLowerCase().includes(searchTerm.toLowerCase())
+    file.fname.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

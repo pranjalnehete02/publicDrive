@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Button, Card, Typography, Input, Box, CircularProgress, styled } from "@mui/material";
+import { useSelector } from "react-redux";
+import toast from 'react-hot-toast'
 
 // Styled components for the UI
 const Root = styled("div")(({ theme }) => ({
@@ -29,6 +31,7 @@ const UploadPage = () => {
   const [folder, setFolder] = useState(null);
   const [isFileUpload, setIsFileUpload] = useState(true); // Track file/folder mode
   const [isUploading, setIsUploading] = useState(false);
+  const username = useSelector(state=>state.user.user)
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -47,17 +50,22 @@ const UploadPage = () => {
     } else if (!isFileUpload && folder) {
       Array.from(folder).forEach((file) => formData.append("files", file));
     }
+    
 
     try {
+      console.log(username)
       setIsUploading(true);
-      const response = await axios.post("http://192.168.100.120:8080/api/files/upload", formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/files/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        params: { username },
       });
-      alert(response.data);
+        
+      toast.success(response.data);
     } catch (error) {
-      alert("Error uploading file");
+      toast.error("Error uploading file");
     } finally {
       setIsUploading(false);
     }
@@ -72,7 +80,7 @@ const UploadPage = () => {
 
         {isUploading && <CircularProgress />}
 
-        {/* File Upload Section */}
+        
         {isFileUpload && (
           <Box>
             <Input
