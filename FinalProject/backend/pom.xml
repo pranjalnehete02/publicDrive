@@ -66,6 +66,12 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
 		<!-- 3. Module for security of application -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
