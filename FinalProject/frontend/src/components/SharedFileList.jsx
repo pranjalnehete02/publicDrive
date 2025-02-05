@@ -12,11 +12,11 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import { Download, Share, Pageview } from "@mui/icons-material";
+import { Download, Share, Pageview,Edit } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Importing axios for API calls
-
+import toast from "react-hot-toast";
 export const SharedFileList = () => {
   const [files, setFiles] = useState([]); // State to store files
   const [loading, setLoading] = useState(true); // Loading state
@@ -48,7 +48,15 @@ export const SharedFileList = () => {
 
     fetchSharedFiles(); // Call the function to fetch files
   }, [username]); // Dependency array to refetch files if username changes
+  const editHandler = (fid, fname) => {
+    const fileExtension = fname.split('.').pop().toLowerCase(); // Get file extension
 
+    if (fileExtension !== "txt") {
+        toast.error("Only text files (.txt) can be edited!", { position: "top-right" });
+        return;
+    }
+    navigate(`/homepage/editfile?fid=${fid}`);
+};
   const downloadHandler = async (fid) => {
     try {
       const response = await fetch(
@@ -171,6 +179,9 @@ export const SharedFileList = () => {
                   >
                     <Download />
                   </IconButton>
+                   <IconButton onClick={() => editHandler(file?.fileId, file?.fileName)} size="small" sx={{ color: "#3498db" }}>
+                                      <Edit />
+                                    </IconButton>
                   <IconButton size="small" sx={{ color: "#f39c12" }}>
                     <Share />
                   </IconButton>
