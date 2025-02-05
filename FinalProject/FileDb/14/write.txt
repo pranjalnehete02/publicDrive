@@ -1,0 +1,82 @@
+
+#include <iostream>
+using namespace std;
+#include <string>
+class Students{
+	int rno;
+cout<<"hey"
+	string name;
+	const string schoolName;
+	public:	
+        
+	Students():rno(0),name(""),schoolName("Cdac") {
+		cout<<"Default Constructor is called"<<endl;;
+	}
+/*	Students(){
+		cout<<"Default Constructor is called"<<endl;
+		this->rno=0;
+		this->name="";
+	}*/
+	Students(int rno,string name):rno(rno),name(name),schoolName("Cdac") {
+		cout<<"Parameterized Constructor is called"<<endl;;
+	}
+
+/*	Students(int rno,string name){
+		cout<<"Parameterized Constructor is called"<<endl;
+	}*/
+	void acceptStudents(){
+        cout<<"Enter a roll no "<<endl;
+                cin>>this->rno;
+                cin.get();
+                cout<<"Enter name "<<endl;
+                getline(cin,this->name);
+        }
+        void printStudent(){
+		 cout<<this<<endl;
+		 cout<<"Student "<<this->rno<<" "<<this->name<<" "<<schoolName<<endl;
+            }
+};
+int main(){
+
+	Students s1;
+	s1.printStudent();
+	cout<<&s1<<endl;
+	
+	Students s2(12,"Ayush");
+	s2.printStudent();
+	
+	Students s3;
+	s3.acceptStudents();
+	s3.printStudent();
+	
+	Students *s4 = new Students();
+	s4->acceptStudents();
+	s4->printStudent();	
+	
+	Students students[2];
+	for(int i=0;i<2;i++){
+		students[i].acceptStudents();
+		students[i].printStudent();
+	}
+	int size=0;
+	cout<<"Enter number of students you want to add"<<endl
+	cin<<size;
+	Students *s5[size];
+
+	for(int i=0;i<2;i++){
+		int r;
+		string name;
+		cout<<"Enter roll no."<<endl;
+		cin>>r;
+		cin.get();
+		cout<<"Enter name"<<endl;
+		getline(cin,name);
+		s5[i]=new Students(r,name);
+	}
+	for(int i=0;i<2;i++){
+		s5[i]->printStudent();
+	}
+	
+	return 0;
+
+}
