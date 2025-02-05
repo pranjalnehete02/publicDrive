@@ -131,6 +131,7 @@ export default function Login() {
                 placeholder="Password"
                 onChange={handleInputChange}
               />
+              <Components.Anchor href="#" onClick={() => {setForgotPassword(true); setSignIn(false)}}>Forgot your password?</Components.Anchor>
               <Components.Button type="button" onClick={handleLogin}>
                 Sign In
               </Components.Button>
