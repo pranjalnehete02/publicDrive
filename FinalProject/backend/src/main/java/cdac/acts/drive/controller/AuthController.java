@@ -14,6 +14,7 @@ import cdac.acts.drive.filter.CustomJWTTokenService;
 import cdac.acts.drive.repository.FolderRepository;
 import cdac.acts.drive.repository.UserRepository;
 import cdac.acts.drive.service.RegisterService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,7 @@ import org.springframework.security.core.Authentication;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth Api", description = "For Authentication of users")
 public class AuthController {
 
     @Value("${file.storage.path}")

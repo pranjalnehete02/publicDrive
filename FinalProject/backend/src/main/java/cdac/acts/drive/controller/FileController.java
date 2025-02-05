@@ -6,6 +6,7 @@ import cdac.acts.drive.entity.User;
 import cdac.acts.drive.repository.FileStorageRepository;
 import cdac.acts.drive.repository.FolderRepository;
 import cdac.acts.drive.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -154,6 +155,7 @@ public class FileController {
 //    }
 
     @GetMapping("/download/{fid}")
+    @Operation(summary = "Get files by ID", description = "Fetch a files using its ID")
     public ResponseEntity<byte[]> downloadFile(@PathVariable("fid") Long fid) {
         // Step 1: Find the file in the database by fid
         Optional<FileStorage> fileStorageOptional = fileStorageRepository.findById(fid);
