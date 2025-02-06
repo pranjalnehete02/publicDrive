@@ -34,7 +34,7 @@ import org.springframework.security.core.Authentication;
 public class AuthController {
 
     @Value("${file.storage.path}")
-    private String storagePath;
+    String storagePath;
     private Path rootLocation;
 
     @PostConstruct
@@ -53,7 +53,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     // Store active tokens per username
-    private final ConcurrentHashMap<String, String> activeTokens = new ConcurrentHashMap<>();
+    ConcurrentHashMap<String, String> activeTokens = new ConcurrentHashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/login")
