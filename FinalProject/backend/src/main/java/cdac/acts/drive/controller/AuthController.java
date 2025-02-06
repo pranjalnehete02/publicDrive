@@ -16,6 +16,8 @@ import cdac.acts.drive.repository.UserRepository;
 import cdac.acts.drive.service.RegisterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -52,16 +54,19 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     // Store active tokens per username
     private final ConcurrentHashMap<String, String> activeTokens = new ConcurrentHashMap<>();
-
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(authToken);
 
         String token = tokenService.generateToken(authentication.getName());
+        logger.info("generating token");
+
         return ResponseEntity.ok(new AuthResponse(token));
     }
 //    @PostMapping("/signup")
@@ -71,6 +76,7 @@ public class AuthController {
 //    }
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
+
         try {
 
             user.setPassword(user.getPassword());

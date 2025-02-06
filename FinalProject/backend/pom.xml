@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+
 	<dependencies>
 
 		<!-- 1. Making Rest API -->
@@ -129,6 +130,11 @@
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>5.0.0.4389</version> <!-- Use latest version -->
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

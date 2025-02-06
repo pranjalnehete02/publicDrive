@@ -1,0 +1,9 @@
+2025-02-06 12:01:27 [restartedMain] INFO  cdac.acts.drive.DriveApplication - Starting DriveApplication using Java 22.0.2 with PID 19412 (C:\Public Drive F\publicDrive\FinalProject\backend\target\classes started by ayush in C:\Public Drive F\publicDrive\FinalProject\backend)
+2025-02-06 12:01:27 [restartedMain] INFO  cdac.acts.drive.DriveApplication - No active profile set, falling back to 1 default profile: "default"
+2025-02-06 12:01:39 [restartedMain] INFO  cdac.acts.drive.DriveApplication - Started DriveApplication in 13.633 seconds (process running for 14.624)
+2025-02-06 12:01:53 [http-nio-0.0.0.0-8081-exec-1] INFO  c.a.drive.controller.UserController - generating token
+2025-02-06 12:04:22 [restartedMain] INFO  cdac.acts.drive.DriveApplication - Starting DriveApplication using Java 22.0.2 with PID 7628 (C:\Public Drive F\publicDrive\FinalProject\backend\target\classes started by ayush in C:\Public Drive F\publicDrive\FinalProject\backend)
+2025-02-06 12:04:22 [restartedMain] INFO  cdac.acts.drive.DriveApplication - No active profile set, falling back to 1 default profile: "default"
+2025-02-06 12:04:39 [restartedMain] INFO  cdac.acts.drive.DriveApplication - Started DriveApplication in 17.995 seconds (process running for 19.191)
+2025-02-06 12:05:04 [http-nio-0.0.0.0-8081-exec-1] INFO  c.a.drive.controller.UserController - generating token
+2025-02-06 12:05:04 [http-nio-0.0.0.0-8081-exec-1] ERROR c.a.drive.controller.UserController - Token Generated
