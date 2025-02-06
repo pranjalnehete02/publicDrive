@@ -66,7 +66,7 @@ public class AuthController {
 
         String token = tokenService.generateToken(authentication.getName());
         logger.info("generating token");
-
+        logger.info("logging in user");
         return ResponseEntity.ok(new AuthResponse(token));
     }
 //    @PostMapping("/signup")
@@ -101,9 +101,10 @@ public class AuthController {
             rootFolder.setUser(savedUser);
             rootFolder.setParentFolder(null);
             folderRepository.save(rootFolder);
-
+            logger.info("signing up user");
             return ResponseEntity.status(201).body("User registered successfully, folder created, and root folder added.");
         } catch (Exception e) {
+            logger.error("Error in signup {}",user.getUsername(),e);
             return ResponseEntity.status(500).body("An error occurred while registering the user.");
         }
     }
@@ -136,6 +137,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody LoginRequest loginRequest) {
         activeTokens.remove(loginRequest.getUsername());
+        logger.info("Logging of user {}",loginRequest.getUsername());
         return ResponseEntity.ok("Logged out successfully.");
     }
 }
