@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7fb;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4e73df;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        .file-list li {
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .file-list li .btn {
+            margin-left: 10px;
+        }
+        .form-group input, .form-group select {
+            margin-top: 10px;
+        }
+        .alert {
+            margin-top: 20px;
+            display: none;
+        }
+        #fileContentDisplay {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>File Sharing System</h2>
+
+    <!-- File Upload Form -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Upload File</h5>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" id="fileInput" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+            <div class="alert alert-success" id="uploadSuccessAlert">File uploaded successfully!</div>
+            <div class="alert alert-danger" id="uploadErrorAlert">Error uploading file!</div>
+        </div>
+    </div>
+
+    <!-- Share File Form -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Share File</h5>
+            <form id="shareForm">
+                <div class="form-group">
+                    <label for="fileId">File ID</label>
+                    <input type="number" id="fileId" class="form-control" required placeholder="Enter file ID">
+                </div>
+                <div class="form-group">
+                    <label for="sharedWithUserId">Shared with User ID</label>
+                    <input type="number" id="sharedWithUserId" class="form-control" required placeholder="Enter user ID">
+                </div>
+                <div class="form-group">
+                    <label for="accessLevel">Access Level</label>
+                    <select id="accessLevel" class="form-control" required>
+                        <option value="READ">Read</option>
+                        <option value="WRITE">Write</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Share</button>
+            </form>
+            <div class="alert alert-success" id="shareSuccessAlert">File shared successfully!</div>
+            <div class="alert alert-danger" id="shareErrorAlert">Error sharing file!</div>
+        </div>
+    </div>
+
+    <!-- Shared Files -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Files Shared with Me</h5>
+            <div class="form-group">
+                <label for="userIdInput">Enter User ID</label>
+                <input type="number" id="userIdInput" class="form-control" placeholder="Enter your user ID" required>
+                <button id="fetchSharedFilesBtn" class="btn btn-info mt-3">Fetch Shared Files</button>
+            </div>
+            <ul class="file-list" id="sharedFilesList">
+                <!-- Shared files will be displayed here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- File Content Display -->
+    <div id="fileContentDisplay" class="card">
+        <div class="card-body">
+            <h5 class="card-title">File Content</h5>
+            <pre id="fileContentText" class="bg-light p-3"></pre>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle interactions -->
+<script>
+    // Handle file upload
+    document.getElementById('uploadForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        let fileInput = document.getElementById('fileInput');
+        let file = fileInput.files[0];
+        if (file) {
+            let formData = new FormData();
+            formData.append('file', file);
+
+            fetch('http://localhost:8082/api/upload', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  document.getElementById('uploadSuccessAlert').style.display = 'block';
+                  document.getElementById('uploadErrorAlert').style.display = 'none';
+              })
+              .catch(error => {
+                  document.getElementById('uploadErrorAlert').style.display = 'block';
+                  document.getElementById('uploadSuccessAlert').style.display = 'none';
+              });
+        }
+    });
+
+    // Handle file sharing
+    document.getElementById('shareForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        let fileId = document.getElementById('fileId').value;
+        let sharedWithUserId = document.getElementById('sharedWithUserId').value;
+        let accessLevel = document.getElementById('accessLevel').value;
+
+        let formData = new FormData();
+        formData.append('fileId', fileId);
+        formData.append('sharedWithUserId', sharedWithUserId);
+        formData.append('accessLevel', accessLevel);
+
+        fetch('http://localhost:8082/api/files/share-with-user', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            // Check if the response is successful
+            if (response.ok) {
+                document.getElementById('shareSuccessAlert').style.display = 'block';
+                document.getElementById('shareErrorAlert').style.display = 'none';
+            } else {
+                document.getElementById('shareErrorAlert').style.display = 'block';
+                document.getElementById('shareSuccessAlert').style.display = 'none';
+            }
+        }).catch(error => {
+            document.getElementById('shareErrorAlert').style.display = 'block';
+            document.getElementById('shareSuccessAlert').style.display = 'none';
+        });
+    });
+
+    // Handle fetching shared files for a user
+    document.getElementById('fetchSharedFilesBtn').addEventListener('click', function () {
+        let userId = document.getElementById('userIdInput').value;
+        fetchSharedFiles(userId);
+    });
+
+    function fetchSharedFiles(userId) {
+        let formData = new FormData();
+        formData.append('userId', userId);
+
+        fetch(`http://localhost:8082/api/files/shared-with-me/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const sharedFilesList = document.getElementById('sharedFilesList');
+                sharedFilesList.innerHTML = ''; // Clear the list
+                data.forEach(file => {
+                    let listItem = document.createElement('li');
+                    listItem.innerHTML = `<span onclick="viewFileContent(${file.id})" style="cursor: pointer; color: #007bff;">${file.fileName} (ID: ${file.id})</span>`;
+                    sharedFilesList.appendChild(listItem);
+                });
+            });
+    }
+
+    // Function to fetch and display file content
+    function viewFileContent(id) {
+        fetch(`http://localhost:8082/api/files/view/${id}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('fileContentText').innerText = data;
+                document.getElementById('fileContentDisplay').style.display = 'block';
+            })
+            .catch(error => {
+                alert("Error fetching file content");
+            });
+    }
+</script>
+
+</body>
+</html>

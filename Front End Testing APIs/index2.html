@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        main {
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input[type="file"],
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container button,
+        .form-container input[type="checkbox"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .file-actions button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .file-actions button:hover {
+            background-color: #45a049;
+        }
+        .file-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .file-actions button {
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>File Management System</h1>
+</header>
+
+<main>
+    <div class="container">
+
+        <!-- File Upload Form -->
+        <div class="form-container">
+            <h2>Upload File</h2>
+            <form id="uploadForm">
+                <input type="file" id="fileInput" name="file" required>
+                <button type="submit">Upload File</button>
+            </form>
+        </div>
+
+        <!-- File Search -->
+        <div class="form-container">
+            <h2>Search Files</h2>
+            <input type="text" id="searchInput" placeholder="Search by file name" oninput="searchFiles()">
+        </div>
+
+        <!-- Display Files List -->
+        <div class="file-list">
+            <h2>All Files</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="fileList">
+                    <!-- Files will be displayed here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Share File Form -->
+        <div class="form-container">
+            <h2>Share File</h2>
+            <input type="text" id="sharingTokenInput" placeholder="Enter file sharing token" required>
+            <input type="email" id="emailInput" placeholder="Recipient's email" required>
+            <label for="editableCheckbox">
+                <input type="checkbox" id="editableCheckbox"> Editable
+            </label>
+            <button type="button" onclick="shareFile()">Share File</button>
+        </div>
+
+        <!-- File Actions -->
+        <div class="file-actions" id="fileActions" style="display: none;">
+            <button onclick="downloadFile()">Download</button>
+            <button onclick="viewFileAsHtml()">View as HTML</button>
+            <button onclick="editFile()">Edit File</button>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    // Fetch and display files from backend
+    async function fetchFiles() {
+        try {
+            const response = await fetch('http://localhost:8081/api/files');
+            const files = await response.json();
+            console.log('Files fetched:', files); // Debugging: Check API response structure
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                // Ensure the structure matches: file.name and file.sharing_token
+                console.log(`Displaying file: ${file.name}, ${file.sharing_token}`); // Debugging log
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${file.name}</td>
+                    <td><button onclick="setFileActions('${file.sharing_token}')">Actions</button></td>
+                `;
+                fileList.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Error fetching files:', error);
+        }
+    }
+
+    // Set file actions (Download, Edit, View)
+    function setFileActions(sharingToken) {
+        const fileActions = document.getElementById('fileActions');
+        fileActions.style.display = 'flex';
+        fileActions.dataset.sharingToken = sharingToken;
+    }
+
+    // Download file
+    async function downloadFile() {
+        const sharingToken = document.getElementById('fileActions').dataset.sharingToken;
+        window.location.href = `http://localhost:8081/api/files/download/${sharingToken}`;
+    }
+
+    // View file as HTML
+    async function viewFileAsHtml() {
+        const sharingToken = document.getElementById('fileActions').dataset.sharingToken;
+        window.open(`http://localhost:8081/api/files/view/${sharingToken}`, '_blank');
+    }
+
+    // Edit file
+    async function editFile() {
+        const sharingToken = document.getElementById('fileActions').dataset.sharingToken;
+        window.location.href = `http://localhost:8081/api/files/edit/${sharingToken}`;
+    }
+
+    // Upload file handler
+    document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append('file', document.getElementById('fileInput').files[0]);
+
+        try {
+            const response = await fetch('http://localhost:8081/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('File uploaded successfully!');
+                fetchFiles(); // Refresh file list
+            } else {
+                alert('Failed to upload file');
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    });
+
+    // Share file via email
+    async function shareFile() {
+        const sharingToken = document.getElementById('sharingTokenInput').value;
+        const email = document.getElementById('emailInput').value;
+        const editable = document.getElementById('editableCheckbox').checked;
+
+        try {
+            const response = await fetch('http://localhost:8081/api/files/share', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `sharingToken=${sharingToken}&email=${email}&editable=${editable}`,
+            });
+
+            if (response.ok) {
+                alert('File shared successfully!');
+            } else {
+                alert('Failed to share file');
+            }
+        } catch (error) {
+            console.error('Error sharing file:', error);
+        }
+    }
+
+    // Search files by name
+    async function searchFiles() {
+        const name = document.getElementById('searchInput').value;
+        try {
+            const response = await fetch(`http://localhost:8081/api/files/search?name=${name}`);
+            const files = await response.json();
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${file.name}</td>
+                    <td><button onclick="setFileActions('${file.sharing_token}')">Actions</button></td>
+                `;
+                fileList.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Error searching files:', error);
+        }
+    }
+
+    // Initial fetch of files
+    fetchFiles();
+</script>
+
+</body>
+</html>
